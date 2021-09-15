@@ -5,6 +5,7 @@ from sys import argv
 import zipfile
 import tempfile
 
+# parse command line options
 try:
     opts, args = getopt.getopt(sys.argv[1:], '', ['osc='])
 except getopt.GetoptError as err:
@@ -25,6 +26,7 @@ for opt, arg in opts:
             print("osc must be number")
             sys.exit(0)
 
+# read input
 try:
     zipped = zipfile.ZipFile(args[0], mode='r')
 except zipfile.BadZipfile:
@@ -41,6 +43,8 @@ if rawdata[0:4] != b'PROG':
 
 converted = os.path.splitext(args[0])[0] + ".mnlgxdprog"
 print ("export to file: %s" % converted)
+
+# Initial program data
 
 newdata = bytearray.fromhex(\
 '50524f47496e69742050726f6772616d'\
@@ -131,6 +135,8 @@ file_info = '''<?xml version="1.0" encoding="UTF-8"?>
 
 '''
 
+# ---------- do conversion -------------
+
 mod_param_map = [\
                  -1,  1, -1,  2,  3, \
                   4,  5,  6,  7, -1, \
@@ -141,6 +147,7 @@ mod_param_map = [\
                  26, 0]
 
 voice_mode = ['', 'ARP', 'CHORD', 'UNISON', 'POLY']
+
 # patch name
 newdata[4:16] = rawdata[4:16]
 # sub timbre
@@ -336,6 +343,7 @@ newdata[150] = rawdata[54]
 # tempo
 newdata[164:166] = rawdata[24:26]
 
+# write the converted data
 with tempfile.TemporaryDirectory() as tmpdir:
     cwd = os.getcwd()
     with open(os.path.join(tmpdir, "FileInformation.xml"), "w") as f:
