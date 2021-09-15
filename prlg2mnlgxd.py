@@ -33,6 +33,9 @@ except zipfile.BadZipfile:
 with zipped as f:
     rawdata = f.read('Prog_%03d.prog_bin'  % 0)
 
+if len(rawdata) != 336:
+    raise ValueError('Bad file format (invalid length)')
+
 if rawdata[0:4] != b'PROG':
     exit()
 
@@ -140,6 +143,9 @@ mod_param_map = [\
 voice_mode = ['', 'ARP', 'CHORD', 'UNISON', 'POLY']
 # patch name
 newdata[4:16] = rawdata[4:16]
+# sub timbre
+if rawdata[17] == 1:
+    print("Warning: Sub timbre is ON, but only main timber is converted")
 # octave
 newdata[16] = rawdata[16]
 # portamento
