@@ -137,7 +137,7 @@ file_info = '''<?xml version="1.0" encoding="UTF-8"?>
 
 # ---------- do conversion -------------
 
-mod_param_map = [\
+wheel_param_map = [\
                  -1,  1, -1,  2,  3, \
                   4,  5,  6,  7, -1, \
                   8,  9, 10, 11, 12, \
@@ -145,6 +145,15 @@ mod_param_map = [\
                  17, 18, 19, -1, -1, \
                  21, 22, 23, 24, 25, \
                  26, 0]
+
+pedal_param_map = [\
+                 -1, -1, -1,  1, -1, \
+                  2,  3,  4,  5,  6, \
+                  7, 20,  8,  9, 10, \
+                 11, 12, 13, 20, 14, \
+                 15, 16, 17, 18, 19, \
+                 -1, -1, 21, 22, 23, \
+                 24, 27, 28]
 
 voice_mode = ['', 'ARP', 'CHORD', 'UNISON', 'POLY']
 
@@ -298,13 +307,11 @@ elif rawdata[62] == 2:
 newdata[111] = rawdata[80+79]
 newdata[112] = rawdata[80+80]
 # joystick assign (+) = wheel, (-) = pedal
-print(rawdata[80+77])
-print(rawdata[80+78])
-val = mod_param_map[rawdata[80+77]]
+val = wheel_param_map[rawdata[80+77] - 2]
 if val >= 0:
     newdata[113] = val
     newdata[114] = rawdata[80+115]
-val = mod_param_map[rawdata[80+78]]
+val = pedal_param_map[rawdata[80+78]]
 if val >= 0:
     newdata[115] = val
     # joystick range (-) = max value
