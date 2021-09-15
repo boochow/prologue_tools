@@ -199,6 +199,9 @@ if rawdata[73] > 0:
         val = 788
     elif val == 5:
         val = 859
+    # ARP range
+    if rawdata[74] > 0:
+        val = val + 80
     valbytes = int.to_bytes(val, 2, byteorder='little')
     newdata[19:21] = valbytes[0:2]
     # ARP gate time and rate
