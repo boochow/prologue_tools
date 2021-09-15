@@ -255,18 +255,23 @@ else:
     print("Warning: EG sustain level is high, decay time set to maximum value")
     newdata[76:78] = b'\xff\x03'
 # eg int, target
-if 492 <= int.from_bytes(rawdata[80+17:80+19], byteorder='little') <= 532 :
-    # pitch EG intensity is zero, EG only modulates cutoff
+pitch_eg_int = abs(int.from_bytes(rawdata[80+17:80+19], byteorder='little') - 512)
+cutoff_eg_int = abs(int.from_bytes(rawdata[80+48:80+50], byteorder='little') - 512)
+if cutoff_eg_int >= pitch_eg_int :
     newdata[78:80] = rawdata[80+48:80+50]
     newdata[80] = 0
+    if pitch_eg_int > 20:
+        print("Warning: EG is used to mod cutoff, pitch mod is ignored")
 else:
-    if 492 <= int.from_bytes(rawdata[80+48:80+50], byteorder='little') <= 532 :
-        print("Warning: EG-to-pitch mod enabled, cutoff mod is disabled")
     newdata[78:80] = rawdata[80+17:80+19]
     if rawdata[80+16] == 1:
+        # target VCO = VCO1+VCO2
         newdata[80] = 2
     else:
+        # target VCO = VCO2
         newdata[80] = 1
+    if cutoff_eg_int > 20:
+        print("Warning: EG is used to mod pitch, cutoff mod is ignored")
 # LFO
 newdata[81] = rawdata[80+70]
 if rawdata[80+71] == 0:
