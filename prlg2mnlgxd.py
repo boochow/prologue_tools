@@ -212,11 +212,11 @@ newdata[28:34] = rawdata[80+19:80+25]
 if rawdata[80+25] == 0:
     # ring on
     newdata[35] = 1
-    newdata[36:38] = rawdata[26:28]
+    newdata[36:38] = rawdata[80+26:80+28]
 elif rawdata[80+25] == 2:
     # sync on
     newdata[34] = 1
-    newdata[36:38] = rawdata[26:28]
+    newdata[36:38] = rawdata[80+26:80+28]
 # multi type
 newdata[38] = rawdata[80+29]
 # noise
