@@ -30,16 +30,16 @@ for opt, arg in opts:
 try:
     zipped = zipfile.ZipFile(args[0], mode='r')
 except zipfile.BadZipfile:
-    raise ValueError('Bad file format')
+    raise ValueError("Bad file format %s" % args[0])
 
 with zipped as f:
     rawdata = f.read('Prog_%03d.prog_bin'  % 0)
 
 if len(rawdata) != 336:
-    raise ValueError('Bad file format (invalid length)')
+    raise ValueError("Bad file format (invalid length) %s" % args[0])
 
 if rawdata[0:4] != b'PROG':
-    raise ValueError('Bad file format (invalid signature)')
+    raise ValueError("Bad file format (invalid signature) %s" % args[0])
 
 converted = os.path.splitext(args[0])[0] + ".mnlgxdprog"
 print ("export to file: %s" % converted)
@@ -298,6 +298,8 @@ elif rawdata[62] == 2:
 newdata[111] = rawdata[80+79]
 newdata[112] = rawdata[80+80]
 # joystick assign (+) = wheel, (-) = pedal
+print(rawdata[80+77])
+print(rawdata[80+78])
 val = mod_param_map[rawdata[80+77]]
 if val >= 0:
     newdata[113] = val
