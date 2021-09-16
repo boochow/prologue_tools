@@ -42,7 +42,7 @@ if rawdata[0:4] != b'PROG':
     raise ValueError("Bad file format (invalid signature) %s" % args[0])
 
 converted = os.path.splitext(args[0])[0] + ".mnlgxdprog"
-print ("export to file: %s" % converted)
+print ("Export to: %s" % converted)
 
 # Initial program data
 
@@ -273,7 +273,7 @@ if cutoff_eg_int >= pitch_eg_int :
     newdata[78:80] = rawdata[80+48:80+50]
     newdata[80] = 0
     if pitch_eg_int > 20:
-        print("Warning: EG is used to mod cutoff, pitch mod is ignored")
+        print("Warning: EG is used for cutoff mod, and pitch mod is ignored")
 else:
     newdata[78:80] = rawdata[80+17:80+19]
     if rawdata[80+16] == 1:
@@ -283,7 +283,7 @@ else:
         # target VCO = VCO2
         newdata[80] = 1
     if cutoff_eg_int > 20:
-        print("Warning: EG is used to mod pitch, cutoff mod is ignored")
+        print("Warning: EG is used for pitch mod, and cutoff mod is ignored")
 # LFO
 newdata[81] = rawdata[80+70]
 if rawdata[80+71] == 0:
