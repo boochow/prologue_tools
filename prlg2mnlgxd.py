@@ -155,7 +155,16 @@ pedal_param_map = [\
                  -1, -1, 21, 22, 23, \
                  24, 27, 28]
 
-voice_mode = ['', 'ARP', 'CHORD', 'UNISON', 'POLY']
+voice_mode_prologue = ['POLY', 'MONO', 'UNISON', 'CHORD']
+voice_mode_minilogue = ['', 'ARP', 'CHORD', 'UNISON', 'POLY']
+vco_wave = ['SQR', 'TRI', 'SAW']
+multi_type = ['NOISE', 'VPM', 'USER']
+# summary
+print("Info:\t%s\t" % rawdata[4:16].decode().replace("\x00", ''), end='')
+print("%s\t" % voice_mode_prologue[rawdata[80+6]], end='')
+print("%s\t" % vco_wave[rawdata[80+10]], end='')
+print("%s\t" % vco_wave[rawdata[80+19]], end='')
+print("%s" % multi_type[rawdata[80+29]])
 
 # patch name
 newdata[4:16] = rawdata[4:16]
@@ -189,7 +198,7 @@ else:
 # ARP
 if rawdata[73] > 0:
     # ARP on or latch
-    print("Warning: ARP is ON, voice mode (%s) is overwritten" % voice_mode[newdata[21]])
+    print("Warning: ARP is ON, voice mode (%s) is overwritten" % voice_mode_minilogue[newdata[21]])
     newdata[21] = 1
     # ARP type
     val = rawdata[75]
