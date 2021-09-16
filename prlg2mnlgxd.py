@@ -180,7 +180,7 @@ elif rawdata[80+6] == 2:
     newdata[19:21] = rawdata[80+4:80+6]
 elif rawdata[80+6] == 1:
     # mono
-    newdata[21] = 3
+    newdata[21] = 2
     newdata[19:21] = (0,0)
 else:
     # poly
