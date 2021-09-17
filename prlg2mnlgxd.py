@@ -191,6 +191,9 @@ elif rawdata[80+6] == 1:
     # mono
     newdata[21] = 2
     newdata[19:21] = (0,0)
+    mod_depth = int.from_bytes(rawdata[80+4:80+6], byteorder='little')
+    if mod_depth > 150:
+        print("Warning: Mono mode voice depth is large value(%d)" % mod_depth)
 else:
     # poly
     newdata[19:21] = rawdata[80+4:80+6]
