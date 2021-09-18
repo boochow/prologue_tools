@@ -262,7 +262,7 @@ newdata[66:74] = rawdata[80+54:80+62]
 # eg attack, decay
 newdata[74:76] = rawdata[80+62:80+64]
 sustain_level = int.from_bytes(rawdata[80+66:80+68], byteorder='little')
-if sustain_level <= 200:
+if sustain_level < 256:
     # sustain level is low
     newdata[76:78] = rawdata[80+64:80+66]
 else:
