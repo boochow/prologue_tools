@@ -261,12 +261,13 @@ newdata[65] = rawdata[80+52]
 newdata[66:74] = rawdata[80+54:80+62]
 # eg attack, decay
 newdata[74:76] = rawdata[80+62:80+64]
-if rawdata[80+67] == 0:
+sustain_level = int.from_bytes(rawdata[80+66:80+68], byteorder='little')
+if sustain_level <= 200:
     # sustain level is low
     newdata[76:78] = rawdata[80+64:80+66]
 else:
     # if sustain lavel is high, set decay time to max
-    print("Warning: EG sustain level is high, decay time set to maximum value")
+    print("Warning: EG sustain level is high(%d), decay time set to maximum value" % sustain_level)
     newdata[76:78] = b'\xff\x03'
 # eg int, target
 pitch_eg_int = abs(int.from_bytes(rawdata[80+17:80+19], byteorder='little') - 512)
