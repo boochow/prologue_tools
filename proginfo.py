@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import sys, getopt
+import os, sys, getopt
 from sys import argv
 import zipfile
 import re
@@ -12,6 +12,17 @@ try:
 except getopt.GetoptError as err:
     print("proginfo [-h] [-i] [-p] [--offset pos[,pos2,..]] program_file")
     sys.exit(0)
+
+if len(args) == 0:
+    print("proginfo [-h] [-i] [-p] [--offset pos[,pos2,..]] program_file")
+    sys.exit(0)
+
+f_ext = os.path.splitext(args[0])[1]
+data_size = 0
+for ext, size in (('.prlgprog', 336), ('.mnlgxdprog', 1024)):
+    if f_ext == ext:
+        data_size = size
+        break
 
 show_program_name = True
 show_program_info  = True
@@ -39,8 +50,8 @@ for opt, arg in opts:
                     print("offset must be a number")
                     sys.exit(0)
                 offsets.append((int(num_opt.group(1)), num_opt.group(2)))
-        if not (all(map(lambda x:x[0] in range (0, 336), offsets))):
-            print("offset must be 0..335")
+        if not (all(map(lambda x:x[0] in range (0, data_size), offsets))):
+            print("offset must be 0..%d" % (data_size - 1))
             sys.exit(0)
 
 # read input
@@ -53,7 +64,7 @@ except zipfile.BadZipfile:
 with zipped as f:
     rawdata = f.read('Prog_%03d.prog_bin'  % 0)
 
-if len(rawdata) != 336:
+if len(rawdata) != data_size:
     raise ValueError("Bad file format (invalid length) %s" % args[0])
 
 if rawdata[0:4] != b'PROG':
