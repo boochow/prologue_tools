@@ -17,10 +17,10 @@ if len(args) == 0:
     print("proginfo [-h] [-i] [-p] [--offset pos[,pos2,..]] program_file")
     sys.exit(0)
 
-f_ext = os.path.splitext(args[0])[1]
+file_ext = os.path.splitext(args[0])[1]
 data_size = 0
 for ext, size in (('.prlgprog', 336), ('.mnlgxdprog', 1024)):
-    if f_ext == ext:
+    if file_ext == ext:
         data_size = size
         break
 
@@ -75,14 +75,21 @@ if rawdata[0:4] != b'PROG':
 voice_mode_prologue = ['POLY', 'MONO', 'UNISON', 'CHORD']
 vco_wave = ['SQR', 'TRI', 'SAW']
 multi_type = ['NOISE', 'VPM', 'USER']
+voice_mode_minilogue = ['-', 'ARP', 'CHORD', 'UNISON', 'POLY']
 result = []
 if show_program_name:
     result.append(rawdata[4:16].decode().replace("\x00", ''))
 if show_program_info:
-    result.append(voice_mode_prologue[rawdata[80+6]])
-    result.append(vco_wave[rawdata[80+10]])
-    result.append(vco_wave[rawdata[80+19]])
-    result.append(multi_type[rawdata[80+29]])
+    if file_ext == '.prlgprog':
+        result.append(voice_mode_prologue[rawdata[80+6]])
+        result.append(vco_wave[rawdata[80+10]])
+        result.append(vco_wave[rawdata[80+19]])
+        result.append(multi_type[rawdata[80+29]])
+    elif file_ext == '.mnlgxdprog':
+        result.append(voice_mode_minilogue[rawdata[21]])
+        result.append(vco_wave[rawdata[22]])
+        result.append(vco_wave[rawdata[28]])
+        result.append(multi_type[rawdata[38]])
 if len(offsets) > 0:
     for pos, opt in offsets:
         if opt == 'd':
