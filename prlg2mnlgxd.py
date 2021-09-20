@@ -279,12 +279,16 @@ if abs(cutoff_eg_int) >= abs(pitch_eg_int) :
         print("Warning: EG is used for cutoff mod(%d), pitch mod(%d) is ignored" % (cutoff_eg_int, pitch_eg_int))
 else:
     newdata[78:80] = rawdata[80+17:80+19]
-    if rawdata[80+16] == 1:
-        # target VCO = VCO1+VCO2
-        newdata[80] = 2
-    else:
-        # target VCO = VCO2
+    if rawdata[80+16] < 2:
+        # target VCO = (0) VCO2 or (1) VCO1+VCO2
         newdata[80] = 1
+        # on minilogue xd: target VCO = VCO2
+        if rawdata[80+16] == 1:
+        # target VCO = VCO1+VCO2 (MULTI must be excluded)
+            print("Warning: EG target is VCO1+VCO2 but set to VCO2 to exclude MULTI")
+    else:
+        # target VCO = ALL
+        newdata[80] = 2
     if abs(cutoff_eg_int) > 20:
         print("Warning: EG is used for pitch mod(%d), cutoff mod(%d) is ignored" % (pitch_eg_int, cutoff_eg_int))
 # LFO
