@@ -7,10 +7,10 @@ This tool converts a Prologue's patch file (`*.prlgprog`) to Minilogue xd's (`*.
 Usage:
 
 ``
- prlg2mnlgxd [--osc N] filename.prlgprog
+ prlg2mnlgxd [-n] [--osc N] filename.prlgprog
 ``
  
-This writes the program file for minilogue xd "`file.mnlgxdprog`" into the same directory as the input file.
+`prlog2mnlgxd` reads a Prologue program file `filename.prlgprog`, then translate it for minilogue XD and writes the program file for minilogue xd "`filename.mnlgxdprog`" into the same directory as the input file. When `-n` is specified, nothing will be written while all conversion warnings are still printed.
 
 When `--osc N` is specified,  the user oscillator slot number is forced to be N.
 
