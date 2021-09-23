@@ -9,7 +9,7 @@ import tempfile
 try:
     opts, args = getopt.getopt(sys.argv[1:], '', ['osc='])
 except getopt.GetoptError as err:
-    print("prlog2mnlgxd [-o USEROSC_SLOT] file.prlgprog")
+    print("prlog2mnlgxd [--osc USEROSC_SLOT] file.prlgprog")
     sys.exit(0)
 
 osc_num = -1
@@ -20,10 +20,10 @@ for opt, arg in opts:
             if 1 <= osc_num <= 16:
                 print("\nset user oscillator slot to %d" % osc_num)
             else:
-                print("osc must be number 1..16")
+                print("user oscillator slot must be number 1..16")
                 sys.exit(0)
         else:
-            print("osc must be number")
+            print("user oscillator slot  must be number")
             sys.exit(0)
 
 # read input
