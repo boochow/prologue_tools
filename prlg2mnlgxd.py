@@ -7,12 +7,13 @@ import tempfile
 
 # parse command line options
 try:
-    opts, args = getopt.getopt(sys.argv[1:], '', ['osc='])
+    opts, args = getopt.getopt(sys.argv[1:], 'n', ['osc='])
 except getopt.GetoptError as err:
-    print("prlog2mnlgxd [--osc USEROSC_SLOT] file.prlgprog")
+    print("prlog2mnlgxd [-n] [--osc USEROSC_SLOT] file.prlgprog")
     sys.exit(0)
 
 osc_num = -1
+write_file = True
 for opt, arg in opts:
     if opt == "--osc":
         if arg.isdigit():
@@ -25,6 +26,8 @@ for opt, arg in opts:
         else:
             print("user oscillator slot  must be number")
             sys.exit(0)
+    elif opt == "-n":
+        write_file = False
 
 # read input
 try:
@@ -42,7 +45,8 @@ if rawdata[0:4] != b'PROG':
     raise ValueError("Bad file format (invalid signature) %s" % args[0])
 
 converted = os.path.splitext(args[0])[0] + ".mnlgxdprog"
-print ("Export to: %s" % converted)
+if write_file:
+    print ("Export to: %s" % converted)
 
 # Initial program data
 
@@ -377,6 +381,10 @@ newdata[150] = rawdata[54]
 newdata[164:166] = rawdata[24:26]
 
 # write the converted data
+
+if not write_file:
+    sys.exit(0)
+
 with tempfile.TemporaryDirectory() as tmpdir:
     cwd = os.getcwd()
     with open(os.path.join(tmpdir, "FileInformation.xml"), "w") as f:
