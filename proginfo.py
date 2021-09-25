@@ -10,11 +10,11 @@ import re
 try:
     opts, args = getopt.getopt(sys.argv[1:], 'hip', ['offset='])
 except getopt.GetoptError as err:
-    print("proginfo [-h] [-i] [-p] [--offset pos[,pos2,..]] program_file")
+    print("proginfo [-h] [-i] [-p] [--offset pos[,pos2,..]] program_file", file=sys.stderr)
     sys.exit(0)
 
 if len(args) == 0:
-    print("proginfo [-h] [-i] [-p] [--offset pos[,pos2,..]] program_file")
+    print("proginfo [-h] [-i] [-p] [--offset pos[,pos2,..]] program_file", file=sys.stderr)
     sys.exit(0)
 
 file_ext = os.path.splitext(args[0])[1]
@@ -23,6 +23,9 @@ for ext, size in (('.prlgprog', 336), ('.mnlgxdprog', 1024)):
     if file_ext == ext:
         data_size = size
         break
+if data_size == 0:
+    print("unknown file extension: %s" % args[0], file=sys.stderr)
+    sys.exit(0)
 
 show_program_name = True
 show_program_info  = True
@@ -47,11 +50,11 @@ for opt, arg in opts:
             else:
                 num_opt = re.match('(\d+)([a-z])', x)
                 if len(num_opt.group(1)) == 0:
-                    print("offset must be a number")
+                    print("offset must be a number", file=sys.stderr)
                     sys.exit(0)
                 offsets.append((int(num_opt.group(1)), num_opt.group(2)))
         if not (all(map(lambda x:x[0] in range (0, data_size), offsets))):
-            print("offset must be 0..%d" % (data_size - 1))
+            print("offset must be 0..%d" % (data_size - 1), file=sys.stderr)
             sys.exit(0)
 
 # read input
@@ -105,7 +108,7 @@ if len(offsets) > 0:
         elif opt == '' or opt == 'd':
             result.append(str(value))
         else:
-            print(" offset '%d%s' not recognized" % (pos, opt))
+            print(" offset '%d%s' not recognized" % (pos, opt), file=sys.stderr)
             sys.exit()
 print("\t".join(result))
 sys.exit()
