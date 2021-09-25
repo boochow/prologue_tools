@@ -71,3 +71,16 @@ offset 92-93: VCO1 pitch
 offset 94-95: VCO1 shape
 
 offset 118-119: VCO1 level
+
+## setunitnum
+This tool changes the slot number of user OSC, user modulation, user delay, or user reverb.
+
+Usage:
+
+``
+setunitnum.py [-h] [--osc OSC_NUM] [--mod MOD_NUM] [--delay DELAY_NUM] [--reverb REVERB_NUM] filename.extension
+``
+
+A new program file with the given unit numbers will be written into the same directory as `filename`.
+
+The filename will be `filename_O`*OSC_NUM*`_M`*MOD_NUM*`_D`*DELAY_NUM*`_R`*REVERB_NUM*`.extension`.
