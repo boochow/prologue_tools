@@ -203,8 +203,8 @@ else:
     newdata[19:21] = rawdata[80+4:80+6]
 
 # ARP
-if rawdata[73] > 0:
-    # ARP on or latch
+if rawdata[73] > 0 and rawdata[26] != 2:
+    # ARP on or latch, and main timbre is targetted
     print("Warning: ARP is ON, voice mode (%s) is overwritten" % voice_mode_minilogue[newdata[21]])
     newdata[21] = 1
     # ARP type
