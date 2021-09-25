@@ -261,6 +261,8 @@ newdata[60:62] = rawdata[80+44:80+46]
 newdata[62:64] = rawdata[80+46:80+48]
 newdata[64] = rawdata[80+50]
 newdata[65] = rawdata[80+52]
+if rawdata[80+51] != 0:
+    print("Warning: Low cut is used but not supported.")
 # amp eg
 newdata[66:74] = rawdata[80+54:80+62]
 # eg attack, decay
