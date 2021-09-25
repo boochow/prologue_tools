@@ -326,6 +326,9 @@ elif rawdata[62] == 1:
     newdata[100] = rawdata[68]
     newdata[101:103] = rawdata[63:65]
     newdata[103:105] = rawdata[65:67]
+    val = int.from_bytes(rawdata[57:59], byteorder='little') - 1
+    if val > 0:
+        newdata[151:153] = int.to_bytes(val, 2, byteorder='little')
 elif rawdata[62] == 2:
     # reverb config
     newdata[99] = 0
@@ -333,6 +336,9 @@ elif rawdata[62] == 2:
     newdata[106] = rawdata[67] 
     newdata[107:109] = rawdata[63:65]
     newdata[109:111] = rawdata[65:67]
+    val = int.from_bytes(rawdata[57:59], byteorder='little') - 1
+    if val > 0:
+        newdata[153:155] = int.to_bytes(val, 2, byteorder='little')
 # pitch bend range
 newdata[111] = rawdata[80+79]
 newdata[112] = rawdata[80+80]
@@ -377,6 +383,8 @@ newdata[146] = rawdata[80+101]
 newdata[147] = rawdata[80+103]
 newdata[148] = rawdata[80+105]
 newdata[149] = rawdata[80+106]
+# transpose
+newdata[150] = rawdata[54]
 # transpose
 newdata[150] = rawdata[54]
 # tempo
