@@ -312,6 +312,8 @@ newdata[88] = rawdata[71]
 newdata[89] = rawdata[41]
 newdata[94] = rawdata[50]
 newdata[95:99] = rawdata[42:46]
+# mod effect
+newdata[90:94] = rawdata[46:50]
 # delay & reverb config
 if rawdata[72] == 0:
     # off
