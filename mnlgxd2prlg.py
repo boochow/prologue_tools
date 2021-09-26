@@ -227,7 +227,7 @@ elif rawdata[21] == 3:
     newdata[80+4:80+6] = rawdata[19:21]
 elif rawdata[21] == 4:
     # poly
-    newdata[80+6] = 4
+    newdata[80+6] = 0
     newdata[80+4:80+6] = rawdata[19:21]
 # vco1
 newdata[80+10:80+16] = rawdata[22:28]
