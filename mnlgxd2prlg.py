@@ -156,7 +156,7 @@ newdata[56] = rawdata[1023]
 delay_is_on = (rawdata[99] != 0)
 reverb_is_on = (rawdata[105] != 0)
 if delay_is_on and reverb_is_on:
-    print("Both delay and reverb are ON, reverb settings are ignored")
+    print("Warning: Both delay and reverb are ON, reverb settings are ignored")
 
 if delay_is_on:
     newdata[62] = 1
