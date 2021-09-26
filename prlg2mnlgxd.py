@@ -349,11 +349,27 @@ val = wheel_param_map[rawdata[80+77] - 2]
 if val >= 0:
     newdata[113] = val
     newdata[114] = rawdata[80+115]
+
+if rawdata[62] == 1:
+    # delay is on
+    if val == 25:
+        newdata[113] = 27
+    elif val == 26:
+        newdata[113] = 28
+
 val = pedal_param_map[rawdata[80+78]]
 if val >= 0:
     newdata[115] = val
     # joystick range (-) = max value
     newdata[116] = 200
+
+if rawdata[62] == 1:
+    # delay is on
+    if val == 25:
+        newdata[115] = 27
+    elif val == 26:
+        newdata[115] = 28
+
 # micro tuning, scale, program tuning
 newdata[122] = rawdata[51]
 newdata[123] = rawdata[52]
