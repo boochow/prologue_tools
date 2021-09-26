@@ -1,8 +1,8 @@
 # Korg prologue tools
 
-## prlg2mnlgxd
+## prlg2mnlgxd, mnlgxd2prlg
 
-This tool converts a Prologue's patch file (`*.prlgprog`) to Minilogue xd's (`*.mnlgxdprog`).
+These tools convert a Prologue's patch file (`*.prlgprog`) to Minilogue xd's (`*.mnlgxdprog`) and vice versa.
 
 Usage:
 
@@ -25,6 +25,8 @@ Warning: EG sustain level is high(594), decay time set to maximum value
 Warning: EG is used for pitch mod(255), cutoff mod(-93) is ignored
 Warning: Fast LFO mode is used but not supported
 ```
+
+`mnlgxd2prlg` converts a Minilogue XD patch file into a Prologue patch file in the same manner.
 
 ## proginfo
 This tool shows the value of specified field  in the given program file. See Table 3 of [Prologue's MIDI implementation documnt](https://www.korg.com/us/support/download/manual/0/778/4066/) for details of the program file's data structure.
