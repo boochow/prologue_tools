@@ -29,6 +29,18 @@ parser.add_argument('filename',
 
 args = parser.parse_args()
 
+fbody, fext = os.path.splitext(args.filename)
+converted = fbody
+if args.osc != None:
+    converted = converted + '_O' + str(args.osc).zfill(2)
+if args.mod != None:
+    converted = converted + '_M' + str(args.mod).zfill(2)
+if args.delay != None:
+    converted = converted + '_D' + str(args.delay).zfill(2)
+if args.reverb != None:
+    converted = converted + '_R' + str(args.reverb).zfill(2)
+converted = converted + fext
+
 # read input
 
 try:
@@ -41,7 +53,8 @@ with zipped as f:
     prog_info = f.read('Prog_000.prog_info')
     file_info = f.read('FileInformation.xml')
 
-if len(rawdata) != 336:
+if not ((len(rawdata) == 336 and fext == '.prlgprog') or \
+        (len(rawdata) == 1024 and fext == '.mnlgxdprog')):
     raise ValueError("Bad file format (invalid length) %s" % args[0])
 
 if rawdata[0:4] != b'PROG':
@@ -53,35 +66,31 @@ newdata = bytearray(rawdata)
 
 # change user unit numbers
 
+if fext == '.prlgprog':
+    ofs_osc, ofs_mod, ofs_delay, ofs_reverb = (80+33, 50, 68, 67)
+elif fext == '.mnlgxdprog':
+    ofs_osc, ofs_mod, ofs_delay, ofs_reverb = (41, 94, 100, 106)
+else:
+    print("Unknown file extension %s" % fext)
+    sys.exit(0)
+
 if args.osc != None:
-    newdata[80+33] = args.osc - 1
-    print("User OSC number: %d => %d" % (rawdata[80+33] + 1, newdata[80+33] + 1))
+    newdata[ofs_osc] = args.osc - 1
+    print("User OSC number: %d => %d" % (rawdata[ofs_osc] + 1, newdata[ofs_osc] + 1))
 
 if args.mod != None:
-    newdata[50] = args.mod - 1
-    print("User Mod number: %d => %d" % (rawdata[50] + 1, newdata[50] + 1))
+    newdata[ofs_mod] = args.mod - 1
+    print("User Mod number: %d => %d" % (rawdata[ofs_mod] + 1, newdata[ofs_mod] + 1))
 
 if args.delay != None:
-    newdata[68] = args.delay - 1
-    print("User Delay number: %d => %d" % (rawdata[68] + 1, newdata[68] + 1))
+    newdata[ofs_delay] = args.delay - 1
+    print("User Delay number: %d => %d" % (rawdata[ofs_delay] + 1, newdata[ofs_delay] + 1))
 
 if args.reverb != None:
-    newdata[67] = args.reverb - 1
-    print("User Reverb number: %d => %d" % (rawdata[67] + 1, newdata[67] + 1))
+    newdata[ofs_reverb] = args.reverb - 1
+    print("User Reverb number: %d => %d" % (rawdata[ofs_reverb] + 1, newdata[ofs_reverb] + 1))
 
 # write the new data
-
-fbody, fext = os.path.splitext(args.filename) 
-converted = fbody
-if args.osc != None:
-    converted = converted + '_O' + str(args.osc).zfill(2) 
-if args.mod != None:
-    converted = converted + '_M' + str(args.mod).zfill(2) 
-if args.delay != None:
-    converted = converted + '_D' + str(args.delay).zfill(2) 
-if args.reverb != None:
-    converted = converted + '_R' + str(args.reverb).zfill(2) 
-converted = converted + fext
 
 if converted == args.filename:
     print("No modification is specified.")
