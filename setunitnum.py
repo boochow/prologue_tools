@@ -99,11 +99,11 @@ else:
 
 with tempfile.TemporaryDirectory() as tmpdir:
     cwd = os.getcwd()
-    with open(os.path.join(tmpdir, "FileInformation.xml"), "w") as f:
-        print(file_info, file=f)
+    with open(os.path.join(tmpdir, "FileInformation.xml"), "wb") as f:
+        f.write(file_info)
         f.close()
-    with open(os.path.join(tmpdir, "Prog_000.prog_info"), "w") as f:
-        print(prog_info, file=f)
+    with open(os.path.join(tmpdir, "Prog_000.prog_info"), "wb") as f:
+        f.write(prog_info)
         f.close()
     with open(os.path.join(tmpdir, "Prog_000.prog_bin"), 'wb') as f:
         f.write(newdata)
