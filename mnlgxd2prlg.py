@@ -326,6 +326,14 @@ newdata[80+101] = rawdata[146]
 newdata[80+103] = rawdata[147]
 newdata[80+105] = rawdata[148]
 newdata[80+106] = rawdata[149]
+# reserved area
+# these must be zero, or Prologue displays wrong parameter values
+newdata[80+94] = 0
+newdata[80+96] = 0
+newdata[80+98] = 0
+newdata[80+100] = 0
+newdata[80+102] = 0
+newdata[80+104] = 0
 # LFO key sync, voice sync, target sync
 newdata[80+116:80+119] = rawdata[125:128]
 # EG legato, portament mode, portament bpm sync
