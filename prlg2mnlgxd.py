@@ -44,7 +44,9 @@ if len(rawdata) != 336:
 if rawdata[0:4] != b'PROG':
     raise ValueError("Bad file format (invalid signature) %s" % args[0])
 
-converted = os.path.splitext(args[0])[0] + ".mnlgxdprog"
+destdir = os.path.dirname(os.path.abspath(args[0]))
+destfile = os.path.splitext(os.path.basename(args[0]))[0] + ".mnlgxdprog"
+converted = destdir + '/' + destfile
 if write_file:
     print ("Export to: %s" % converted)
 
