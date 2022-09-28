@@ -29,7 +29,7 @@ parser.add_argument('filename',
 
 args = parser.parse_args()
 
-fbody, fext = os.path.splitext(args.filename)
+fbody, fext = os.path.splitext(os.path.abspath(args.filename))
 converted = fbody
 if args.osc != None:
     converted = converted + '_O' + str(args.osc).zfill(2)
