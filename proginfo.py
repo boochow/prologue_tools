@@ -5,6 +5,22 @@ from sys import argv
 import zipfile
 import re
 
+# show help
+
+def help():
+    print("proginfo [-h] [-i] [-p] [--offset pos[,pos2,..]] program_file")
+    print("Options:")
+    print(" -h  help")
+    print(" -p  omit printing the program name")
+    print(" -i  omit printing default program information")
+    print(" --offset N[,N,..]  show the value at Nth byte in the program data")
+    print("format specifiers for --offset")
+    print("  N  : 8 bit integer")
+    print("  Nd : 16 bit integer, little endian")
+    print("  Nx : 8 bit integer in hex")
+    print("  Nc : character")
+    print("  Ns : string, up to 12 characters (for the program name field)")
+
 # parse command line options
 
 try:
@@ -13,19 +29,19 @@ except getopt.GetoptError as err:
     print("proginfo [-h] [-i] [-p] [--offset pos[,pos2,..]] program_file", file=sys.stderr)
     sys.exit(0)
 
-if len(args) == 0:
-    print("proginfo [-h] [-i] [-p] [--offset pos[,pos2,..]] program_file", file=sys.stderr)
-    sys.exit(0)
-
-file_ext = os.path.splitext(args[0])[1]
-data_size = 0
-for ext, size in (('.prlgprog', 336), ('.mnlgxdprog', 1024)):
-    if file_ext == ext:
-        data_size = size
-        break
-if data_size == 0:
-    print("unknown file extension: %s" % args[0], file=sys.stderr)
-    sys.exit(0)
+if len(args) > 0:
+    file_ext = os.path.splitext(args[0])[1]
+    data_size = 0
+    for ext, size in (('.prlgprog', 336), ('.mnlgxdprog', 1024)):
+        if file_ext == ext:
+            data_size = size
+            break
+    if data_size == 0:
+        print("unknown file extension: %s" % args[0], file=sys.stderr)
+        sys.exit(0)
+else:
+    help()
+    sys.exit()
 
 show_program_name = True
 show_program_info  = True
@@ -36,23 +52,23 @@ for opt, arg in opts:
     elif opt == "-i":
         show_program_info = False
     elif opt == "-h":
-        print("proginfo [options] program_file")
-        print("Options:")
-        print(" -h help")
-        print(" -p omit printing the program name")
-        print(" -i omit printing default program information")
+        help()
         sys.exit()
     elif opt == "--offset":
-        offsets_args = arg.split(',')
-        for x in offsets_args:
-            if x.isdigit():
-                offsets.append((int(x), ''))
-            else:
-                num_opt = re.match('(\d+)([a-z])', x)
-                if len(num_opt.group(1)) == 0:
-                    print("offset must be a number", file=sys.stderr)
-                    sys.exit(0)
-                offsets.append((int(num_opt.group(1)), num_opt.group(2)))
+        if len(args) == 0:
+            print("--offset requires an argument", file=sys.stderr)
+            sys.exit(0)
+        else:
+            for x in arg.split(','):
+                if x.isdigit():
+                    offsets.append((int(x), ''))
+                else:
+                    num_opt = re.match('(\d+)([a-z])', x)
+                    if num_opt is None:
+                        print("offset must be a number", file=sys.stderr)
+                        sys.exit(0)
+                    else:
+                        offsets.append((int(num_opt.group(1)), num_opt.group(2)))
         if not (all(map(lambda x:x[0] in range (0, data_size), offsets))):
             print("offset must be 0..%d" % (data_size - 1), file=sys.stderr)
             sys.exit(0)
