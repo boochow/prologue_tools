@@ -7,13 +7,14 @@ import tempfile
 
 # parse command line options
 try:
-    opts, args = getopt.getopt(sys.argv[1:], 'n', ['osc='])
+    opts, args = getopt.getopt(sys.argv[1:], 'nr', ['osc='])
 except getopt.GetoptError as err:
     print("mnlgxd2prlog [-n] [--osc USEROSC_SLOT] file.rlgprog")
     sys.exit(0)
 
 osc_num = -1
 write_file = True
+prioritize_reverb = False
 for opt, arg in opts:
     if opt == "--osc":
         if arg.isdigit():
@@ -28,6 +29,8 @@ for opt, arg in opts:
             sys.exit(0)
     elif opt == "-n":
         write_file = False
+    elif opt == "-r":
+        prioritize_reverb = True
 
 # read input
 try:
@@ -158,7 +161,12 @@ newdata[56] = rawdata[1023]
 delay_is_on = (rawdata[99] != 0)
 reverb_is_on = (rawdata[105] != 0)
 if delay_is_on and reverb_is_on:
-    print("Warning: Both delay and reverb are ON, reverb settings are ignored")
+    if prioritize_reverb:
+        print("Warning: Both delay and reverb are ON, delay settings are ignored")
+        delay_is_on = False
+    else:
+        print("Warning: Both delay and reverb are ON, reverb settings are ignored")
+        reverb_is_on = False
 
 if delay_is_on:
     newdata[62] = 1
