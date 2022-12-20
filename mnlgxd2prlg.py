@@ -176,14 +176,14 @@ if delay_is_on:
     newdata[65:67] = rawdata[103:105]
     val = int.from_bytes(rawdata[151:153], byteorder='little')
     if val != 512:
-        newdata[57:59] = int.to_bytes(val, 2, byteorder='little') + 1
+        newdata[57:59] = int.to_bytes(val + 1, 2, byteorder='little')
 elif reverb_is_on:
     newdata[62] = 2
     newdata[63:65] = rawdata[107:109]
     newdata[65:67] = rawdata[109:111]
     val = int.from_bytes(rawdata[153:155], byteorder='little')
     if val != 512:
-        newdata[57:59] = int.to_bytes(val, 2, byteorder='little') + 1
+        newdata[57:59] = int.to_bytes(val + 1, 2, byteorder='little')
 newdata[68] = rawdata[100]
 newdata[67] = rawdata[106]
 # fx on/off
