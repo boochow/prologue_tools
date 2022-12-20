@@ -37,6 +37,8 @@ try:
     zipped = zipfile.ZipFile(args[0], mode='r')
 except zipfile.BadZipfile:
     raise ValueError("Bad file format %s" % args[0])
+except FileNotFoundError:
+    raise ValueError("File not found %s" % args[0])
 
 with zipped as f:
     rawdata = f.read('Prog_%03d.prog_bin'  % 0)
