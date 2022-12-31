@@ -229,13 +229,13 @@ if rawdata[21] == 2:
         newdata[80+6] = 1
     else:
         # chord mode
-        newdata[80+6] = 2
+        newdata[80+6] = 3
         val = max([1023, int((val - 69) / 68 * 73)])
         valbytes = int.to_bytes(val, 2, byteorder='little')
         newdata[80+4:80+6] = valbytes[0:2]
 elif rawdata[21] == 3:
     # unison
-    newdata[80+6] = 3
+    newdata[80+6] = 2
     newdata[80+4:80+6] = rawdata[19:21]
 elif rawdata[21] == 4:
     # poly
