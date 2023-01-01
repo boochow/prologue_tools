@@ -323,14 +323,19 @@ elif rawdata[80] == 2:
 newdata[80+70] = rawdata[81]
 if rawdata[82] == 0:
     print("Warning: 1-shot LFO mode is used but not supported.");
-if rawdata[82] == 1:
-    # mode = bpm
-    newdata[80+71] = 0
+    # LFO rate, int, target
+    newdata[80+72:80+74] = rawdata[83:85]
+    newdata[80+74:80+76] = b'\x00\x02'
+    newdata[80+76] = rawdata[87]
 else:
-    # mode = normal
-    newdata[80+71] = 1
-# LFO rate, int
-newdata[80+72:80+77] = rawdata[83:88]
+    if rawdata[82] == 1:
+        # mode = bpm
+        newdata[80+71] = 0
+    else:
+        # mode = normal
+        newdata[80+71] = 1
+    # LFO rate, int, target
+    newdata[80+72:80+77] = rawdata[83:88]
 # pitch bend range
 newdata[80+79] = rawdata[111]
 newdata[80+80] = rawdata[112]
