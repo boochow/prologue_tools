@@ -323,6 +323,8 @@ elif rawdata[80] == 2:
 newdata[80+70] = rawdata[81]
 if rawdata[82] == 0:
     print("Warning: 1-shot LFO mode is used but not supported.");
+    # mode = normal
+    newdata[80+71] = 1
     # LFO rate, int, target
     newdata[80+72:80+74] = rawdata[83:85]
     newdata[80+74:80+76] = b'\x00\x02'
