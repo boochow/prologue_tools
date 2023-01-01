@@ -327,17 +327,20 @@ if rawdata[82] == 0:
     newdata[80+71] = 1
     # LFO rate, int, target
     newdata[80+72:80+74] = rawdata[83:85]
-    newdata[80+74:80+76] = b'\x00\x02'
+    # To disable 1-shot LFO, use the line below to set the intensity to zero.
+    # newdata[80+74:80+76] = b'\x00\x02'
+    newdata[80+74:80+76] = rawdata[85:87]
     newdata[80+76] = rawdata[87]
 else:
-    if rawdata[82] == 1:
+    if rawdata[82] == 2:
         # mode = bpm
         newdata[80+71] = 0
     else:
         # mode = normal
         newdata[80+71] = 1
     # LFO rate, int, target
-    newdata[80+72:80+77] = rawdata[83:88]
+    newdata[80+72:80+74] = rawdata[83:85]
+    newdata[80+74:80+77] = rawdata[85:88]
 # pitch bend range
 newdata[80+79] = rawdata[111]
 newdata[80+80] = rawdata[112]
