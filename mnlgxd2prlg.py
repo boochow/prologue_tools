@@ -7,7 +7,7 @@ import tempfile
 
 # parse command line options
 try:
-    opts, args = getopt.getopt(sys.argv[1:], 'nr', ['osc='])
+    opts, args = getopt.getopt(sys.argv[1:], 'nrd', ['osc='])
 except getopt.GetoptError as err:
     print("mnlgxd2prlog [-n] [--osc USEROSC_SLOT] file.rlgprog")
     sys.exit(0)
@@ -15,6 +15,7 @@ except getopt.GetoptError as err:
 osc_num = -1
 write_file = True
 prioritize_reverb = False
+prioritize_delay = False
 for opt, arg in opts:
     if opt == "--osc":
         if arg.isdigit():
@@ -31,6 +32,11 @@ for opt, arg in opts:
         write_file = False
     elif opt == "-r":
         prioritize_reverb = True
+    elif opt == "-d":
+        prioritize_delay = True
+
+if prioritize_reverb and prioritize_delay:
+    raise ValueError("You can't use both -r and -d at the same time.")
 
 # read input
 try:
@@ -163,12 +169,22 @@ newdata[56] = rawdata[1023]
 delay_is_on = (rawdata[99] != 0)
 reverb_is_on = (rawdata[105] != 0)
 if delay_is_on and reverb_is_on:
+    if not(prioritize_reverb or prioritize_delay):
+        delay_depth = int.from_bytes(rawdata[103:105], byteorder='little')
+        reverb_depth = int.from_bytes(rawdata[109:111], byteorder='little')
+        if delay_depth > reverb_depth:
+            prioritize_delay = True
+        else:
+            prioritize_reverb = True
     if prioritize_reverb:
         print("Warning: Both delay and reverb are ON, delay settings are ignored")
         delay_is_on = False
-    else:
+    elif prioritize_delay:
         print("Warning: Both delay and reverb are ON, reverb settings are ignored")
         reverb_is_on = False
+    else:
+        raise ValueError("This line must not be executed")
+        
 
 if delay_is_on:
     newdata[62] = 1
