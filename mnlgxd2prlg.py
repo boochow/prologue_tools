@@ -158,8 +158,8 @@ newdata[42:46] = rawdata[95:99]
 newdata[46:51] = rawdata[90:95]
 # micro tuning, scale, program tuning
 newdata[51] = rawdata[122]
-newdata[52] = rawdata[123]
-newdata[53] = rawdata[124]
+newdata[52] = rawdata[123] + 1
+newdata[53] = rawdata[124] + 1
 # transpose
 newdata[54] = rawdata[150]
 # ARP gate time and rate
