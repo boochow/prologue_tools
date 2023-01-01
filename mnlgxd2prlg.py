@@ -262,8 +262,8 @@ newdata[80+10:80+16] = rawdata[22:28]
 # vco2
 newdata[80+19:80+25] = rawdata[28:34]
 # sync and ring
-sync_is_on = (rawdata[35] != 0)
-ring_is_on = (rawdata[36] != 0)
+sync_is_on = (rawdata[34] != 0)
+ring_is_on = (rawdata[35] != 0)
 if sync_is_on and ring_is_on:
     print("Warning: Both SYNC and RING are enabled, RING is going to be disabled.")
 newdata[80+26:80+28] = rawdata[36:38]
