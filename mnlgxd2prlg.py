@@ -302,7 +302,7 @@ newdata[80+53] = rawdata[128]
 # amp eg
 newdata[80+54:80+62] = rawdata[66:74]
 # eg attack, decay
-newdata[80+62:80+64] = rawdata[74:76]
+newdata[80+62:80+66] = rawdata[74:78]
 newdata[80+66:80+70] = b'\x00\x00\x00\x00'
 # eg int, target
 if rawdata[80] == 0:
