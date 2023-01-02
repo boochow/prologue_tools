@@ -9,7 +9,7 @@ Usage:
 ``
  prlg2mnlgxd [-n] [--osc N] filename.prlgprog
 ``
- 
+
 `prlog2mnlgxd` reads a Prologue program file `filename.prlgprog`, then translate it for minilogue XD and writes the program file for minilogue xd "`filename.mnlgxdprog`" into the same directory as the input file. When `-n` is specified, nothing will be written while all conversion warnings are still printed.
 
 When `--osc N` is specified,  the user oscillator slot number is forced to be N.
@@ -17,7 +17,7 @@ When `--osc N` is specified,  the user oscillator slot number is forced to be N.
 Example:
 
 ```
-$ python3 ./prlg2mnlgxd.py 240_Fly-by.prlgprog 
+$ python3 ./prlg2mnlgxd.py 240_Fly-by.prlgprog
 Export to: 240_Fly-by.mnlgxdprog
 Info:	Fly-by	UNISON	SAW	SQR	VPM
 Warning: Sub timbre is ON, but only main timber is converted
@@ -27,6 +27,14 @@ Warning: Fast LFO mode is used but not supported
 ```
 
 `mnlgxd2prlg` converts a Minilogue XD patch file into a Prologue patch file in the same manner.
+
+``
+ mnlgxd2prlg [-nrd] [--osc N] filename.mnlgxdprog
+``
+
+Since minilogue XD can enable both delay and reverb simultaneously but Prologue can't, you can specify priority between delay and reverb with `-r`(reverb) and `-d`(delay) options. When none of these are set, one with the larger depth value is prioritized.
+
+The one-shot mode for minilogue xd's LFO isn't available on Prologue, so the one-shot mode is always converted to normal(slow) mode on Prologue. Try to minimize the LFO intensity if your patch doesn't sound well on Prologue.
 
 ## proginfo
 This tool shows the value of specified field  in the given program file. See Table 3 of [Prologue's MIDI implementation documnt](https://www.korg.com/us/support/download/manual/0/778/4066/) for details of the program file's data structure.
@@ -61,7 +69,7 @@ You can specify the output format of the value by adding single character after 
 Example:
 
 ```
-./proginfo.py -i --offset=90,91,92d,94d,118d Runner_Brass.prlgprog 
+./proginfo.py -i --offset=90,91,92d,94d,118d Runner_Brass.prlgprog
 Runner Brass	2	0	512	0	862
 ```
 offset 90: VCO1 wave (0 : SQR, 1 : TRI, 2 : SAW)
