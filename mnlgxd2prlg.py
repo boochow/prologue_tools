@@ -301,9 +301,10 @@ newdata[80+52] = rawdata[65]
 newdata[80+53] = rawdata[128]
 # amp eg
 newdata[80+54:80+62] = rawdata[66:74]
-# eg attack, decay
+# eg attack, decay (decay is also copied onto release)
 newdata[80+62:80+66] = rawdata[74:78]
-newdata[80+66:80+70] = b'\x00\x00\x00\x00'
+newdata[80+66:80+68] = b'\x00\x00'
+newdata[80+68:80+70] = rawdata[76:78]
 # eg int, target
 if rawdata[80] == 0:
     # EG -> cutoff
